@@ -36,10 +36,11 @@ Use this skill when users request:
    - 香港站: Add `hk-` prefix (e.g., `hk-your_session_id`)
    - 日本站: Add `jp-` prefix (e.g., `jp-your_session_id`)
    - 新加坡站: Add `sg-` prefix (e.g., `sg-your_session_id`)
+   - 马来西亚站: Add `my-` prefix (e.g., `my-your_session_id`)
 
 **⚠️ nanobanana Model Resolution Rules**:
    - **US site (us-)**: Fixed at 1024×1024 with 2k resolution; ignores user-provided `ratio` and `resolution` parameters
-   - **HK/JP/SG sites (hk-/jp-/sg-)**: Forced 1k resolution, but supports custom `ratio` parameters (e.g., 16:9, 4:3)
+   - **HK/JP/SG/MY sites (hk-/jp-/sg-/my-)**: Forced 1k resolution, but supports custom `ratio` parameters (e.g., 16:9, 4:3)
    - **Domestic site (CN)**: Does not support nanobanana model; use jimeng series instead
 
 **Always ask the user for their Session ID before proceeding**, as the skill does not include a pre-configured credential.
@@ -47,7 +48,7 @@ Use this skill when users request:
 Example prompt to user:
 > "要使用即梦API生成图片,我需要您的Session ID。您可以从即梦网站(jimeng.jianying.com)的浏览器Cookie中获取 sessionid。
 >
-> 如果使用国际站,请在sessionid前添加对应前缀(us-/hk-/jp-/sg-)。
+> 如果使用国际站,请在sessionid前添加对应前缀(us-/hk-/jp-/sg-/my-)。
 >
 > 请提供您的 Session ID。"
 
@@ -254,7 +255,7 @@ Script executes:
 
 **"Session ID required"**
 - Ensure the user has provided their sessionid from 即梦/Dreamina
-- Verify correct region prefix (us-/hk-/jp-/sg- for international sites)
+- Verify correct region prefix (us-/hk-/jp-/sg-/my- for international sites)
 
 **"Invalid session or authentication failed"**
 - Session ID may have expired
@@ -267,12 +268,12 @@ Script executes:
 - Image URLs may have expired (retry generation)
 
 **"Model not supported"**
-- `nanobanana` only works with international sites (us-/hk-/jp-/sg- prefix)
+- `nanobanana` only works with international sites (us-/hk-/jp-/sg-/my- prefix)
 - `jimeng-3.1` only works with domestic sites
 
 **"nanobanana resolution mismatch"**
 - **US site (us- prefix)**: nanobanana model only supports 1024×1024 @ 2k resolution; all `ratio` and `resolution` parameters are ignored
-- **HK/JP/SG sites (hk-/jp-/sg- prefix)**: nanobanana model forces 1k resolution, but allows custom ratios (e.g., 16:9, 4:3)
+- **HK/JP/SG/MY sites (hk-/jp-/sg-/my- prefix)**: nanobanana model forces 1k resolution, but allows custom ratios (e.g., 16:9, 4:3)
 - If you need full control over resolution and ratio, use `jimeng-4.0` model instead
 
 **"intelligent_ratio not working"**

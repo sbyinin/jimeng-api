@@ -63,6 +63,7 @@ curl -X POST http://localhost:5100/v1/images/generations \
 > - **Hong Kong site**: Add **hk-** prefix, e.g., `Bearer hk-your_session_id`
 > - **Japan site**: Add **jp-** prefix, e.g., `Bearer jp-your_session_id`
 > - **Singapore site**: Add **sg-** prefix, e.g., `Bearer sg-your_session_id`
+> - **Malaysia site**: Add **my-** prefix, e.g., `Bearer my-your_session_id`
 >
 > **Note 2**: Supports binding proxies (HTTP/SOCKS5, etc.) in the Token, see [Token Bound Proxy Feature](#token-bound-proxy-feature-new) for details.
 >
@@ -70,7 +71,7 @@ curl -X POST http://localhost:5100/v1/images/generations \
 >
 > **Note 4**: Resolution rules when using the nanobanana model on international sites:
 > - **US site (us-)**: Images are fixed at **1024x1024** with **2k** resolution, ignoring user-provided ratio and resolution parameters
-> - **Hong Kong/Japan/Singapore sites (hk-/jp-/sg-)**: Fixed **1k** resolution, but supports custom `ratio` values (e.g., 16:9, 4:3, etc.)
+> - **Hong Kong/Japan/Singapore/Malaysia sites (hk-/jp-/sg-/my-)**: Fixed **1k** resolution, but supports custom `ratio` values (e.g., 16:9, 4:3, etc.)
 
 ![](https://github.com/iptag/jimeng-api/blob/main/get_sessionid.png)
 
@@ -228,7 +229,7 @@ For more details, see `jimeng-api/Skill.md`.
 **POST** `/v1/images/generations`
 
 **Request Parameters**:
-- `model` (string, optional): The name of the model to use. Defaults to `jimeng-4.5` on all sites (China/US/HK/JP/SG).
+- `model` (string, optional): The name of the model to use. Defaults to `jimeng-4.5` on all sites (China/US/HK/JP/SG/MY).
 - `prompt` (string): The text description of the image.
 - `ratio` (string, optional): The aspect ratio of the image, defaults to `"1:1"`. Supported ratios: `1:1`, `4:3`, `3:4`, `16:9`, `9:16`, `3:2`, `2:3`, `21:9`. **Note**: When `intelligent_ratio` is `true`, this parameter will be ignored and the system will automatically infer the optimal ratio from the prompt.
 - `resolution` (string, optional): The resolution level, defaults to `"2k"`. Supported resolutions: `1k`, `2k`, `4k`.
@@ -263,8 +264,8 @@ curl -X POST http://localhost:5100/v1/images/generations \
 **Supported Models**:
 - `nanobananapro`: International sites only, supports `ratio` and `resolution`.
 - `nanobanana`: International sites only.
-- `jimeng-5.0`: China and Asia international sites (HK/JP/SG).
-- `jimeng-4.6`: China and Asia international sites (HK/JP/SG).
+- `jimeng-5.0`: China and Asia international sites (HK/JP/SG/MY).
+- `jimeng-4.6`: China and Asia international sites (HK/JP/SG/MY).
 - `jimeng-4.5`: Works on all sites, supports all 2k/4k ratios and intelligent_ratio. **(Default for all sites)**
 - `jimeng-4.1`: Works on all sites, supports all 2k/4k ratios and intelligent_ratio.
 - `jimeng-4.0`: Works on all sites.
@@ -310,6 +311,8 @@ Generate a new image based on one or more input images, combined with a text pro
 # US site uses "us-YOUR_SESSION_ID"
 # Hong Kong site uses "hk-YOUR_SESSION_ID"
 # Japan site uses "jp-YOUR_SESSION_ID"
+# Singapore site uses "sg-YOUR_SESSION_ID"
+# Malaysia site uses "my-YOUR_SESSION_ID"
 curl -X POST http://localhost:5100/v1/images/compositions \
   -H "Authorization: Bearer us-YOUR_SESSION_ID" \
   -F "prompt=A cute cat, anime style" \
@@ -318,7 +321,7 @@ curl -X POST http://localhost:5100/v1/images/compositions \
 ```
 
 **Request Parameters**:
-- `model` (string, optional): The name of the model to use. Defaults to `jimeng-4.5` on all sites (China/US/HK/JP/SG).
+- `model` (string, optional): The name of the model to use. Defaults to `jimeng-4.5` on all sites (China/US/HK/JP/SG/MY).
 - `prompt` (string): Text description of the image to guide the generation.
 - `images` (array): An array of input images.
 - `ratio` (string, optional): The aspect ratio of the image, defaults to `"1:1"`. Supported ratios: `1:1`, `4:3`, `3:4`, `16:9`, `9:16`, `3:2`, `2:3`, `21:9`.
@@ -439,7 +442,7 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 > - **Important**: Once image input is provided (image-to-video or first-last frame video), the `ratio` parameter will be ignored, and the video aspect ratio will be determined by the input image's actual ratio. The `resolution` parameter remains effective.
 
 > **Omni Reference Mode** (New):
-> - Requires `functionMode=omni_reference`, with `model=jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast`. Available on China, US, and Asia international sites (HK/JP/SG).
+> - Requires `functionMode=omni_reference`, with `model=jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast`. Available on China, US, and Asia international sites (HK/JP/SG/MY).
 > - **Material Limits**:
 >   - Up to **9 images** (`image_file_1` ~ `image_file_9`)
 >   - Up to **3 videos** (`video_file_1` ~ `video_file_3`)
@@ -462,14 +465,14 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 - `jimeng-video-seedance-2.0` - Seedance 2.0, available on China and international sites, supports 4~15s duration and Omni Reference mode **(Latest)**
 - `jimeng-video-seedance-2.0-fast` - Seedance 2.0 Fast, available on China and international sites, supports 4~15s duration and Omni Reference mode, with faster generation speed
 - `jimeng-video-3.5-pro` - Professional Edition v3.5, works on all sites **(Default)**
-- `jimeng-video-veo3` - Veo3 model, Asia international sites only (HK/JP/SG), fixed 8s duration
-- `jimeng-video-veo3.1` - Veo3.1 model, Asia international sites only (HK/JP/SG), fixed 8s duration
-- `jimeng-video-sora2` - Sora2 model, Asia international sites only (HK/JP/SG)
-- `jimeng-video-3.0-pro` - Professional Edition, China and Asia international sites (HK/JP/SG)
+- `jimeng-video-veo3` - Veo3 model, Asia international sites only (HK/JP/SG/MY), fixed 8s duration
+- `jimeng-video-veo3.1` - Veo3.1 model, Asia international sites only (HK/JP/SG/MY), fixed 8s duration
+- `jimeng-video-sora2` - Sora2 model, Asia international sites only (HK/JP/SG/MY)
+- `jimeng-video-3.0-pro` - Professional Edition, China and Asia international sites (HK/JP/SG/MY)
 - `jimeng-video-3.0` - Standard Edition, works on all sites
-- `jimeng-video-3.0-fast` - Fast Edition, China and Asia international sites (HK/JP/SG)
-- `jimeng-video-2.0-pro` - Professional Edition v2, China and Asia international sites (HK/JP/SG)
-- `jimeng-video-2.0` - Standard Edition v2, China and Asia international sites (HK/JP/SG)
+- `jimeng-video-3.0-fast` - Fast Edition, China and Asia international sites (HK/JP/SG/MY)
+- `jimeng-video-2.0-pro` - Professional Edition v2, China and Asia international sites (HK/JP/SG/MY)
+- `jimeng-video-2.0` - Standard Edition v2, China and Asia international sites (HK/JP/SG/MY)
 
 > **Note**: The US site now supports `jimeng-video-seedance-2.0`, `jimeng-video-seedance-2.0-fast`, `jimeng-video-3.5-pro`, and `jimeng-video-3.0`.
 
@@ -577,9 +580,11 @@ The proxy prefix is at the outermost layer, and the region prefix follows the se
 | China site, no proxy | `session_id_xxx` |
 | US site, no proxy | `us-session_id_xxx` |
 | HK site, no proxy | `hk-session_id_xxx` |
+| MY site, no proxy | `my-session_id_xxx` |
 | China site + SOCKS5 Proxy | `socks5://127.0.0.1:1080@session_id_xxx` |
 | US site + HTTP Proxy | `http://127.0.0.1:7890@us-session_id_xxx` |
 | HK site + Auth Proxy | `http://user:pass@proxy.com:8080@hk-session_id_xxx` |
+| MY site + SOCKS5 Proxy | `socks5://127.0.0.1:1080@my-session_id_xxx` |
 
 **API Call Examples**:
 ```bash

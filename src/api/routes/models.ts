@@ -18,14 +18,14 @@ const VIDEO_MODEL_DESCRIPTIONS: Record<string, string> = {
     'jimeng-video-seedance-2.0': 'Seedance 2.0 视频生成模型，国内站及国际站均支持，支持 4~15 秒与 Omni Reference',
     'jimeng-video-seedance-2.0-fast': 'Seedance 2.0 Fast 视频生成模型，国内站及国际站均支持，支持 4~15 秒与 Omni Reference',
     'jimeng-video-3.5-pro': '即梦AI视频生成模型 3.5 Pro，国内站及国际站均支持',
-    'jimeng-video-veo3': 'Veo3 视频生成模型，仅亚洲国际站 (HK/JP/SG) 支持，固定 8 秒',
-    'jimeng-video-veo3.1': 'Veo3.1 视频生成模型，仅亚洲国际站 (HK/JP/SG) 支持，固定 8 秒',
-    'jimeng-video-sora2': 'Sora2 视频生成模型，仅亚洲国际站 (HK/JP/SG) 支持',
-    'jimeng-video-3.0-pro': '即梦AI视频生成模型 3.0 Pro，国内站和亚洲国际站 (HK/JP/SG) 支持',
+    'jimeng-video-veo3': 'Veo3 视频生成模型，仅亚洲国际站 (HK/JP/SG/MY) 支持，固定 8 秒',
+    'jimeng-video-veo3.1': 'Veo3.1 视频生成模型，仅亚洲国际站 (HK/JP/SG/MY) 支持，固定 8 秒',
+    'jimeng-video-sora2': 'Sora2 视频生成模型，仅亚洲国际站 (HK/JP/SG/MY) 支持',
+    'jimeng-video-3.0-pro': '即梦AI视频生成模型 3.0 Pro，国内站和亚洲国际站 (HK/JP/SG/MY) 支持',
     'jimeng-video-3.0': '即梦AI视频生成模型 3.0，国内站及国际站均支持',
-    'jimeng-video-3.0-fast': '即梦AI视频生成模型 3.0 Fast，国内站和亚洲国际站 (HK/JP/SG) 支持',
-    'jimeng-video-2.0-pro': '即梦AI视频生成模型 2.0 Pro，国内站和亚洲国际站 (HK/JP/SG) 支持',
-    'jimeng-video-2.0': '即梦AI视频生成模型 2.0，国内站和亚洲国际站 (HK/JP/SG) 支持'
+    'jimeng-video-3.0-fast': '即梦AI视频生成模型 3.0 Fast，国内站和亚洲国际站 (HK/JP/SG/MY) 支持',
+    'jimeng-video-2.0-pro': '即梦AI视频生成模型 2.0 Pro，国内站和亚洲国际站 (HK/JP/SG/MY) 支持',
+    'jimeng-video-2.0': '即梦AI视频生成模型 2.0，国内站和亚洲国际站 (HK/JP/SG/MY) 支持'
 };
 
 const SUPPORTED_VIDEO_MODELS = new Set([
