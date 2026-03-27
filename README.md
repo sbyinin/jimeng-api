@@ -17,7 +17,7 @@
 - 🎨 **AI Image Generation**: Supports multiple models and resolutions (default 2K, supports 4K, 1K).
 - 🖼️ **Image-to-Image Synthesis**: Supports local images or image URLs.
 - 🎬 **AI Video Generation**: Supports text-to-video generation, and adds local image upload for image-to-video on the China site.
-- 🌐 **International Site Support**: Added support for text-to-image and image-to-image APIs on Dreamina international sites. Open an issue if you run into problems.
+- 🌐 **International Site Support**: Supports text-to-image, image-to-image, and video generation APIs on Dreamina international sites. Seedance video models are now available internationally as well. Open an issue if you run into problems.
 - 🔄 **Smart Polling**: Adaptive polling mechanism to optimize generation efficiency.
 - 🛡️ **Unified Exception Handling**: Comprehensive error handling and retry mechanism.
 - 📊 **Detailed Logs**: Structured logging for easy debugging.
@@ -406,7 +406,7 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 1. **Text-to-Video**: Pure text prompt without any images
 2. **Image-to-Video**: Single image as the first frame
 3. **First-Last Frame**: Two images as the first and last frames
-4. **Omni Reference** (New): Mixed image + video inputs as reference materials, with `@field_name` references in the prompt to describe each material's role. Only supported by `jimeng-video-seedance-2.0` and `jimeng-video-seedance-2.0-fast`.
+4. **Omni Reference** (New): Mixed image + video inputs as reference materials, with `@field_name` references in the prompt to describe each material's role. Supported by `jimeng-video-seedance-2.0` and `jimeng-video-seedance-2.0-fast` on both China and international sites.
 
 > **Mode Detection**: The system automatically determines the generation mode based on the presence of images:
 > - **No images** → Text-to-Video mode
@@ -429,7 +429,7 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 - `[file]` (file, optional): Local image files uploaded via `multipart/form-data` (up to 2) to specify the **start frame** and **end frame**. The field name can be arbitrary, e.g., `image1`.
 - `functionMode` (string, optional): Generation mode. Defaults to `"first_last_frames"`. Supported values:
   - `"first_last_frames"` (default): Standard mode, auto-detects text-to-video / image-to-video / first-last-frame based on image count.
-  - `"omni_reference"`: Omni Reference mode. Requires `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast` model. Upload files with specific field names: `image_file_1` ~ `image_file_9` (images), `video_file_1` ~ `video_file_3` (videos). Both local files and URLs are supported. Use `@field_name` in the prompt to reference materials.
+  - `"omni_reference"`: Omni Reference mode. Requires `jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast`. Upload files with specific field names: `image_file_1` ~ `image_file_9` (images), `video_file_1` ~ `video_file_3` (videos). Both local files and URLs are supported. Use `@field_name` in the prompt to reference materials.
 - `response_format` (string, optional): Response format, supports `url` (default) or `b64_json`.
 
 > **Image Input Description**:
@@ -439,7 +439,7 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 > - **Important**: Once image input is provided (image-to-video or first-last frame video), the `ratio` parameter will be ignored, and the video aspect ratio will be determined by the input image's actual ratio. The `resolution` parameter remains effective.
 
 > **Omni Reference Mode** (New):
-> - Requires `functionMode=omni_reference` and `model=jimeng-video-seedance-2.0`.
+> - Requires `functionMode=omni_reference`, with `model=jimeng-video-seedance-2.0` or `jimeng-video-seedance-2.0-fast`. Available on China, US, and Asia international sites (HK/JP/SG).
 > - **Material Limits**:
 >   - Up to **9 images** (`image_file_1` ~ `image_file_9`)
 >   - Up to **3 videos** (`video_file_1` ~ `video_file_3`)
@@ -459,8 +459,8 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 > - Example prompt: `"@image_file_1 as first frame, @image_file_2 as last frame, mimic motion from @video_file_1"`
 
 **Supported Video Models**:
-- `jimeng-video-seedance-2.0` - Seedance 2.0, China site only, supports 4~15s duration, supports Omni Reference mode **(Latest)**
-- `jimeng-video-seedance-2.0-fast` - Seedance 2.0 Fast, China site only, supports 4~15s duration, supports Omni Reference mode, faster generation speed
+- `jimeng-video-seedance-2.0` - Seedance 2.0, available on China and international sites, supports 4~15s duration and Omni Reference mode **(Latest)**
+- `jimeng-video-seedance-2.0-fast` - Seedance 2.0 Fast, available on China and international sites, supports 4~15s duration and Omni Reference mode, with faster generation speed
 - `jimeng-video-3.5-pro` - Professional Edition v3.5, works on all sites **(Default)**
 - `jimeng-video-veo3` - Veo3 model, Asia international sites only (HK/JP/SG), fixed 8s duration
 - `jimeng-video-veo3.1` - Veo3.1 model, Asia international sites only (HK/JP/SG), fixed 8s duration
@@ -471,7 +471,7 @@ Generate a video from a text prompt (Text-to-Video) or from start/end frame imag
 - `jimeng-video-2.0-pro` - Professional Edition v2, China and Asia international sites (HK/JP/SG)
 - `jimeng-video-2.0` - Standard Edition v2, China and Asia international sites (HK/JP/SG)
 
-> **Note**: US site only supports `jimeng-video-3.5-pro` and `jimeng-video-3.0` models.
+> **Note**: The US site now supports `jimeng-video-seedance-2.0`, `jimeng-video-seedance-2.0-fast`, `jimeng-video-3.5-pro`, and `jimeng-video-3.0`.
 
 **Usage Examples**:
 
