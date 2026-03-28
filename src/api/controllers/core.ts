@@ -29,6 +29,7 @@ import {
   REGION_JP,
   REGION_SG,
   REGION_MY,
+  REGION_MX,
   VERSION_CODE,
   RETRY_CONFIG
 } from "@/api/consts/common.ts";
@@ -85,6 +86,7 @@ export interface RegionInfo {
   isJP: boolean;
   isSG: boolean;
   isMY: boolean;
+  isMX: boolean;
   isInternational: boolean;
   isCN: boolean;
 }
@@ -118,7 +120,8 @@ export function parseRegionFromToken(refreshToken: string): RegionInfo {
   const isJP = token.startsWith('jp-');
   const isSG = token.startsWith('sg-');
   const isMY = token.startsWith('my-');
-  const isInternational = isUS || isHK || isJP || isSG || isMY;
+  const isMX = token.startsWith('mx-');
+  const isInternational = isUS || isHK || isJP || isSG || isMY || isMX;
 
   return {
     isUS,
@@ -126,6 +129,7 @@ export function parseRegionFromToken(refreshToken: string): RegionInfo {
     isJP,
     isSG,
     isMY,
+    isMX,
     isInternational,
     isCN: !isInternational
   };
@@ -155,7 +159,7 @@ export function getAssistantId(regionInfo: RegionInfo): number {
   if (regionInfo.isUS) return DEFAULT_ASSISTANT_ID_US;
   if (regionInfo.isJP) return DEFAULT_ASSISTANT_ID_JP;
   if (regionInfo.isSG) return DEFAULT_ASSISTANT_ID_SG;
-  if (regionInfo.isHK || regionInfo.isMY) return DEFAULT_ASSISTANT_ID_HK;
+  if (regionInfo.isHK || regionInfo.isMY || regionInfo.isMX) return DEFAULT_ASSISTANT_ID_HK;
   return DEFAULT_ASSISTANT_ID_CN;
 }
 
@@ -164,12 +168,12 @@ export function getAssistantId(regionInfo: RegionInfo): number {
  */
 export function generateCookie(refreshToken: string) {
   const { token: tokenWithRegion } = parseProxyFromToken(refreshToken);
-  const { isUS, isHK, isJP, isSG, isMY } = parseRegionFromToken(tokenWithRegion);
-  const isInternational = isUS || isHK || isJP || isSG || isMY;
+  const { isUS, isHK, isJP, isSG, isMY, isMX } = parseRegionFromToken(tokenWithRegion);
+  const isInternational = isUS || isHK || isJP || isSG || isMY || isMX;
   const token = isInternational
     ? tokenWithRegion.substring(3)
     : tokenWithRegion;
-  const loc = isUS ? "us" : isJP ? "jp" : isHK ? "hk" : isSG ? "sg" : isMY ? "my" : "cn";
+  const loc = isUS ? "us" : isJP ? "jp" : isHK ? "hk" : isSG ? "sg" : isMY ? "my" : isMX ? "mx" : "cn";
 
   return [
     `_tea_web_id=${WEB_ID}`,
@@ -247,7 +251,7 @@ export async function request(
 ) {
   const { token: tokenWithRegion, proxyUrl } = parseProxyFromToken(refreshToken);
   const regionInfo = parseRegionFromToken(tokenWithRegion);
-  const { isUS, isHK, isJP, isSG, isMY } = regionInfo;
+  const { isUS, isHK, isJP, isSG, isMY, isMX } = regionInfo;
   await acquireToken(regionInfo.isInternational ? tokenWithRegion.substring(3) : tokenWithRegion);
   const deviceTime = util.unixTimestamp();
   const sign = util.md5(
@@ -266,8 +270,8 @@ export async function request(
     }
     aid = DEFAULT_ASSISTANT_ID_US;
     region = REGION_US;
-  } else if (isHK || isJP || isSG || isMY) {
-    // HK, JP, SG and MY regions use the same Asia international base URL
+  } else if (isHK || isJP || isSG || isMY || isMX) {
+    // HK, JP, SG, MY and MX regions use the same Asia international base URL
     if (uri.startsWith("/commerce/")) {
       baseUrl = BASE_URL_HK_COMMERCE;
     } else {
@@ -282,6 +286,9 @@ export async function request(
     } else if (isMY) {
       aid = DEFAULT_ASSISTANT_ID_HK;
       region = REGION_MY;
+    } else if (isMX) {
+      aid = DEFAULT_ASSISTANT_ID_HK;
+      region = REGION_MX;
     } else {
       aid = DEFAULT_ASSISTANT_ID_HK;
       region = REGION_HK;
@@ -300,7 +307,7 @@ export async function request(
     aid: aid,
     device_platform: "web",
     region: region,
-    ...(isUS || isHK || isJP || isSG || isMY ? {} : { webId: WEB_ID }),
+    ...(isUS || isHK || isJP || isSG || isMY || isMX ? {} : { webId: WEB_ID }),
     da_version: DA_VERSION,
     os: "windows",
     web_component_open_flag: 1,
@@ -317,8 +324,8 @@ export async function request(
     Appid: aid,
     Cookie: generateCookie(tokenWithRegion),
     "Device-Time": deviceTime,
-    Lan: isUS ? "en" : isJP ? "ja" : (isHK || isSG || isMY) ? "en" : "zh-Hans",
-    Loc: isUS ? "us" : isJP ? "jp" : isHK ? "hk" : isSG ? "sg" : isMY ? "my" : "cn",
+    Lan: isUS ? "en" : isJP ? "ja" : (isHK || isSG || isMY || isMX) ? "en" : "zh-Hans",
+    Loc: isUS ? "us" : isJP ? "jp" : isHK ? "hk" : isSG ? "sg" : isMY ? "my" : isMX ? "mx" : "cn",
     Sign: sign,
     "Sign-Ver": "1",
     Tdid: "",

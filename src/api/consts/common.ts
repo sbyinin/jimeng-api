@@ -23,6 +23,7 @@ export const REGION_HK = "HK";
 export const REGION_JP = "JP";
 export const REGION_SG = "SG";
 export const REGION_MY = "MY";
+export const REGION_MX = "MX";
 
 // 平台代码
 export const PLATFORM_CODE = "7";
@@ -64,7 +65,7 @@ export const IMAGE_MODEL_MAP_US = {
   "nanobananapro": "dreamina_image_lib_1",
 };
 
-// 图像模型映射 - 亚洲国际站 (HK/JP/SG/MY)
+// 图像模型映射 - 亚洲国际站 (HK/JP/SG/MY/MX)
 export const IMAGE_MODEL_MAP_ASIA = {
   "jimeng-5.0": "high_aes_general_v50",
   "jimeng-4.6": "high_aes_general_v42",
@@ -96,7 +97,7 @@ export const VIDEO_MODEL_MAP_US = {
   "jimeng-video-3.0": "dreamina_ic_generate_video_model_vgfm_3.0",
 };
 
-// 视频模型映射 - 亚洲国际站 (HK/JP/SG/MY)
+// 视频模型映射 - 亚洲国际站 (HK/JP/SG/MY/MX)
 export const VIDEO_MODEL_MAP_ASIA = {
   "jimeng-video-seedance-2.0": "dreamina_seedance_40_pro",
   "jimeng-video-seedance-2.0-fast": "dreamina_seedance_40",
